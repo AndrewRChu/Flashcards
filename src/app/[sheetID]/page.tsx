@@ -18,19 +18,33 @@ export default function Home({
     useEffect(() => {
         const fetchData = async () => {
             const res = await fetch(
-                `https://sheets.googleapis.com/v4/spreadsheets/${params.sheetID}?key=${API_KEY}&fields=sheets/data/rowData/values/userEnteredValue`
+                `https://sheets.googleapis.com/v4/spreadsheets/${params.sheetID}?key=${API_KEY}&fields=sheets.data.rowData.values(userEnteredValue,hyperlink)`
             );
             const rawData = await res.json();
             const parsedData = rawData.sheets[0].data[0].rowData.map(
-                (row: any) =>
-                    row.values.map(
+                (row: any) => row.values
+            );
+            setColumns(
+                parsedData
+                    .shift()
+                    .map(
                         (cell: any) =>
                             cell.userEnteredValue &&
                             cell.userEnteredValue.stringValue
                     )
             );
-            setColumns(parsedData.shift());
-            setData(parsedData);
+            setData(
+                parsedData.map((row: any) =>
+                    row.map((cell: any, i: number) => {
+                        return {
+                            value:
+                                cell.userEnteredValue &&
+                                cell.userEnteredValue.stringValue,
+                            hyperlink: cell.hyperlink,
+                        };
+                    })
+                )
+            );
         };
         fetchData();
     }, []);
