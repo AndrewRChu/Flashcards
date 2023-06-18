@@ -1,11 +1,10 @@
 "use client";
 
 import { useState, useEffect, createContext } from "react";
+import { AppContext } from "./AppContext";
 
 import Options from "./Options";
 import Flashcard from "./Flashcard";
-
-export const AppContext = createContext({});
 
 export default function Home({
     params,

@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { AppContext } from "./page";
+import { AppContext } from "./AppContext";
 
 export default function Options() {
     const { columns, setColumns } = useContext<any>(AppContext);

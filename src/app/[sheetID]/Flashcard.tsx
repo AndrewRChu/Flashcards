@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { AppContext } from "./page";
+import { AppContext } from "./AppContext";
 
 export default function Flashcard({ rowNum }: { rowNum: number }) {
     const { columns, data } = useContext<any>(AppContext);
