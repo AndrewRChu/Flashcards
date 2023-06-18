@@ -24,7 +24,9 @@ export default function Home({
             const parsedData = rawData.sheets[0].data[0].rowData.map(
                 (row: any) =>
                     row.values.map(
-                        (cell: any) => cell.userEnteredValue.stringValue
+                        (cell: any) =>
+                            cell.userEnteredValue &&
+                            cell.userEnteredValue.stringValue
                     )
             );
             setColumns(parsedData.shift());
@@ -40,7 +42,7 @@ export default function Home({
     } else {
         return (
             <>
-                <div className="flex gap-16">
+                <div className="flex gap-16 flex-wrap">
                     {data.map((row: any, i: number) => (
                         <Flashcard columns={columns} row={row} key={i} />
                     ))}

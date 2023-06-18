@@ -6,7 +6,7 @@ export default function Flashcard({
     row: Array<string>;
 }) {
     return (
-        <div className="flex flex-col gap-4 border p-8">
+        <div className="flex w-72 flex-col gap-4 border p-8">
             {columns.map((column, i) => (
                 <Column name={column} data={row[i]} key={i} />
             ))}
