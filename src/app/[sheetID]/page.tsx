@@ -1,8 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, createContext } from "react";
 
+import Options from "./Options";
 import Flashcard from "./Flashcard";
+
+export const AppContext = createContext({});
 
 export default function Home({
     params,
@@ -15,6 +18,13 @@ export default function Home({
     const [columns, setColumns] = useState<any>();
     const [data, setData] = useState<any>();
 
+    const contextValue = {
+        columns: columns,
+        setColumns: setColumns,
+        data: data,
+        setData: setData,
+    };
+
     useEffect(() => {
         const fetchData = async () => {
             const res = await fetch(
@@ -25,13 +35,14 @@ export default function Home({
                 (row: any) => row.values
             );
             setColumns(
-                parsedData
-                    .shift()
-                    .map(
-                        (cell: any) =>
+                parsedData.shift().map((cell: any) => {
+                    return {
+                        value:
                             cell.userEnteredValue &&
-                            cell.userEnteredValue.stringValue
-                    )
+                            cell.userEnteredValue.stringValue,
+                        show: true,
+                    };
+                })
             );
             setData(
                 parsedData.map((row: any) =>
@@ -55,13 +66,14 @@ export default function Home({
         return <span>Please enter a valid Google Sheets ID</span>;
     } else {
         return (
-            <>
-                <div className="flex gap-16 flex-wrap">
+            <AppContext.Provider value={contextValue}>
+                <Options />
+                <div className="flex flex-wrap justify-center">
                     {data.map((row: any, i: number) => (
-                        <Flashcard columns={columns} row={row} key={i} />
+                        <Flashcard rowNum={i} key={i} />
                     ))}
                 </div>
-            </>
+            </AppContext.Provider>
         );
     }
 }
