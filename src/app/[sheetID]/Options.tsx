@@ -7,7 +7,7 @@ export default function Options() {
     return (
         <div className="flex justify-center gap-8">
             {columns.map((column: any, i: number) => (
-                <div className="flex flex-row gap-1">
+                <div className="flex flex-row gap-1" key={i}>
                     <input
                         type="checkbox"
                         checked={columns[i].show}
