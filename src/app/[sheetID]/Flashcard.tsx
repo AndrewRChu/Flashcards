@@ -8,7 +8,7 @@ export default function Flashcard({
     return (
         <div className="flex flex-col gap-4 border p-8">
             {columns.map((column, i) => (
-                <Column name={column} data={row[i]} />
+                <Column name={column} data={row[i]} key={i} />
             ))}
         </div>
     );

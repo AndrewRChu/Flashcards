@@ -41,8 +41,8 @@ export default function Home({
         return (
             <>
                 <div className="flex gap-16">
-                    {data.map((row: any) => (
-                        <Flashcard columns={columns} row={row} />
+                    {data.map((row: any, i: number) => (
+                        <Flashcard columns={columns} row={row} key={i} />
                     ))}
                 </div>
             </>
