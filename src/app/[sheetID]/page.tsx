@@ -40,6 +40,7 @@ export default function Home({
                             cell.userEnteredValue &&
                             cell.userEnteredValue.stringValue,
                         show: true,
+                        obscure: true,
                     };
                 })
             );
@@ -69,7 +70,7 @@ export default function Home({
                 <ColumnOptions />
                 <div className="flex flex-col items-center justify-center">
                     <Controls />
-                    <Flashcard />
+                    <Flashcard key={currRow} />
                     <span>{`${currRow}/${data.length}`}</span>
                 </div>
             </AppContext.Provider>
@@ -93,7 +94,17 @@ function ColumnOptions() {
                             setColumns(temp);
                         }}
                         id={`show-${i}`}
-                    ></input>
+                    />
+                    <input
+                        type="checkbox"
+                        checked={columns[i].obscure}
+                        onChange={() => {
+                            let temp = [...columns];
+                            temp[i].obscure = !temp[i].obscure;
+                            setColumns(temp);
+                        }}
+                        id={`obscure-${i}`}
+                    />
                     <label htmlFor={`show-${i}`}>{column.value}</label>
                 </div>
             ))}
@@ -112,6 +123,7 @@ function Flashcard() {
                         <Column
                             name={column.value}
                             data={data[currRow][i]}
+                            obscure={column.obscure}
                             key={i}
                         />
                     )
@@ -120,13 +132,29 @@ function Flashcard() {
     );
 }
 
-function Column({ name, data }: { name: string; data: any }) {
+function Column({
+    name,
+    data,
+    obscure,
+}: {
+    name: string;
+    data: any;
+    obscure: boolean;
+}) {
+    const [blur, setBlur] = useState(obscure);
+
     return (
         data && (
             <div>
                 <strong>{name}</strong>
                 <br />
-                <a href={data.hyperlink}>{data.value}</a>
+                <a
+                    className={`${blur ? "blur-sm" : ""} select-none`}
+                    onClick={() => setBlur(!blur)}
+                    href={data.hyperlink}
+                >
+                    {data.value}
+                </a>
             </div>
         )
     );
