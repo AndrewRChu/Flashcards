@@ -4,10 +4,6 @@ import { useState } from "react";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 export default function Home() {
-    const API_KEY = "AIzaSyDfHG_GQMnzVxxT9It7wK14oLoA3bqcz-E";
-    const [sheetID, setSheetID] = useLocalStorage<string>("sheetID", "");
-    const [data, setData] = useState();
-
     return (
         <>
             <span>

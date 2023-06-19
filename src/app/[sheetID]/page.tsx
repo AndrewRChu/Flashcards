@@ -1,10 +1,7 @@
 "use client";
 
-import { useState, useEffect, createContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import { AppContext } from "./AppContext";
-
-import Options from "./Options";
-import Flashcard from "./Flashcard";
 
 export default function Home({
     params,
@@ -16,12 +13,15 @@ export default function Home({
     const API_KEY = "AIzaSyDfHG_GQMnzVxxT9It7wK14oLoA3bqcz-E";
     const [columns, setColumns] = useState<any>();
     const [data, setData] = useState<any>();
+    const [currRow, setCurrRow] = useState<number>(0);
 
     const contextValue = {
         columns: columns,
         setColumns: setColumns,
         data: data,
         setData: setData,
+        currRow: currRow,
+        setCurrRow: setCurrRow,
     };
 
     useEffect(() => {
@@ -66,13 +66,98 @@ export default function Home({
     } else {
         return (
             <AppContext.Provider value={contextValue}>
-                <Options />
-                <div className="flex flex-wrap justify-center">
-                    {data.map((row: any, i: number) => (
-                        <Flashcard rowNum={i} key={i} />
-                    ))}
+                <ColumnOptions />
+                <div className="flex flex-col items-center justify-center">
+                    <Controls />
+                    <Flashcard />
+                    <span>{`${currRow}/${data.length}`}</span>
                 </div>
             </AppContext.Provider>
         );
     }
+}
+
+function ColumnOptions() {
+    const { columns, setColumns } = useContext<any>(AppContext);
+
+    return (
+        <div className="flex justify-center gap-8 m-12">
+            {columns.map((column: any, i: number) => (
+                <div className="flex flex-row gap-1" key={i}>
+                    <input
+                        type="checkbox"
+                        checked={columns[i].show}
+                        onChange={() => {
+                            let temp = [...columns];
+                            temp[i].show = !temp[i].show;
+                            setColumns(temp);
+                        }}
+                        id={`show-${i}`}
+                    ></input>
+                    <label htmlFor={`show-${i}`}>{column.value}</label>
+                </div>
+            ))}
+        </div>
+    );
+}
+
+function Flashcard() {
+    const { columns, data, currRow } = useContext<any>(AppContext);
+
+    return (
+        <div className="flex w-72 flex-col gap-4 border p-8 m-2">
+            {columns.map(
+                (column: any, i: number) =>
+                    column.show && (
+                        <Column
+                            name={column.value}
+                            data={data[currRow][i]}
+                            key={i}
+                        />
+                    )
+            )}
+        </div>
+    );
+}
+
+function Column({ name, data }: { name: string; data: any }) {
+    return (
+        data && (
+            <div>
+                <strong>{name}</strong>
+                <br />
+                <a href={data.hyperlink}>{data.value}</a>
+            </div>
+        )
+    );
+}
+
+function Controls() {
+    const { data, currRow, setCurrRow } = useContext<any>(AppContext);
+
+    return (
+        <div className="flex flex-row justify-between w-72">
+            <button
+                onClick={() =>
+                    setCurrRow(currRow == 0 ? data.length - 1 : currRow - 1)
+                }
+            >
+                Back
+            </button>
+            <button
+                onClick={() =>
+                    setCurrRow(Math.floor(Math.random() * data.length))
+                }
+            >
+                Random
+            </button>
+            <button
+                onClick={() =>
+                    setCurrRow(currRow == data.length - 1 ? 0 : currRow + 1)
+                }
+            >
+                Next
+            </button>
+        </div>
+    );
 }
