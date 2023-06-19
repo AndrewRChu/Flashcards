@@ -84,28 +84,34 @@ function ColumnOptions() {
     return (
         <div className="flex justify-center gap-8 m-12">
             {columns.map((column: any, i: number) => (
-                <div className="flex flex-row gap-1" key={i}>
-                    <input
-                        type="checkbox"
-                        checked={columns[i].show}
-                        onChange={() => {
-                            let temp = [...columns];
-                            temp[i].show = !temp[i].show;
-                            setColumns(temp);
-                        }}
-                        id={`show-${i}`}
-                    />
-                    <input
-                        type="checkbox"
-                        checked={columns[i].obscure}
-                        onChange={() => {
-                            let temp = [...columns];
-                            temp[i].obscure = !temp[i].obscure;
-                            setColumns(temp);
-                        }}
-                        id={`obscure-${i}`}
-                    />
-                    <label htmlFor={`show-${i}`}>{column.value}</label>
+                <div className="flex flex-col gap-1" key={i}>
+                    <strong>{column.value}</strong>
+                    <div className="flex gap-2">
+                        <input
+                            type="checkbox"
+                            checked={columns[i].show}
+                            onChange={() => {
+                                let temp = [...columns];
+                                temp[i].show = !temp[i].show;
+                                setColumns(temp);
+                            }}
+                            id={`show-${i}`}
+                        />
+                        <label htmlFor={`show-${i}`}>Show</label>
+                    </div>
+                    <div className="flex gap-2">
+                        <input
+                            type="checkbox"
+                            checked={columns[i].obscure}
+                            onChange={() => {
+                                let temp = [...columns];
+                                temp[i].obscure = !temp[i].obscure;
+                                setColumns(temp);
+                            }}
+                            id={`obscure-${i}`}
+                        />
+                        <label htmlFor={`obscure-${i}`}>Obscure</label>
+                    </div>
                 </div>
             ))}
         </div>
