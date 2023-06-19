@@ -71,7 +71,7 @@ export default function Home({
                 <div className="flex flex-col items-center justify-center">
                     <Controls />
                     <Flashcard key={currRow} />
-                    <span>{`${currRow}/${data.length}`}</span>
+                    <span>{`${currRow + 1}/${data.length}`}</span>
                 </div>
             </AppContext.Provider>
         );
