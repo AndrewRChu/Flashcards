@@ -82,7 +82,7 @@ function ColumnOptions() {
     const { columns, setColumns } = useContext<any>(AppContext);
 
     return (
-        <div className="flex justify-center gap-8 m-12">
+        <div className="flex justify-center gap-8 m-12 flex-wrap">
             {columns.map((column: any, i: number) => (
                 <div className="flex flex-col gap-1" key={i}>
                     <strong>{column.value}</strong>
